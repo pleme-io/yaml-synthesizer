@@ -1,0 +1,13 @@
+[package]
+name = "yaml-synthesizer"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.89.0"
+description = "Typed AST for structurally correct YAML generation"
+license = "MIT"
+repository = "https://github.com/pleme-io/yaml-synthesizer"
+
+[dependencies]
+
+[dev-dependencies]
+proptest = "1"
