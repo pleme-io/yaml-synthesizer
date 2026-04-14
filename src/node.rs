@@ -25,7 +25,12 @@ pub enum YamlNode {
     Block(String),
     /// Folded string (block scalar `>`)
     Folded(String),
-    /// Raw YAML (escape hatch)
+    /// Template expression — typed bridge for Helm/Go template syntax.
+    /// NOT an escape hatch: this declares "I am a template expression"
+    /// rather than "I am arbitrary content."
+    TemplateExpr(String),
+    /// Raw YAML — DEPRECATED: use a typed variant instead.
+    #[deprecated(note = "use a typed variant instead of Raw — Raw defeats provability")]
     Raw(String),
 }
 
@@ -115,7 +120,7 @@ impl YamlNode {
                     match &entry.value {
                         // Inline scalars
                         Self::Str(_) | Self::Int(_) | Self::Float(_) | Self::Bool(_)
-                        | Self::Null | Self::Raw(_) => {
+                        | Self::Null | Self::TemplateExpr(_) => {
                             let val = entry.value.emit(0);
                             lines.push(format!("{pad}{}: {val}{comment_suffix}", entry.key));
                         }
@@ -148,6 +153,11 @@ impl YamlNode {
                         // Comments/blanks shouldn't be values but handle gracefully
                         Self::Comment(_) | Self::Blank => {
                             lines.push(format!("{pad}{}:{comment_suffix}", entry.key));
+                        }
+                        // Catch remaining (deprecated Raw) — emit as inline
+                        _ => {
+                            let val = entry.value.emit(0);
+                            lines.push(format!("{pad}{}: {val}{comment_suffix}", entry.key));
                         }
                     }
                 }
@@ -196,6 +206,8 @@ impl YamlNode {
                 }
                 lines.join("\n")
             }
+            Self::TemplateExpr(s) => format!("{pad}{s}"),
+            #[allow(deprecated)]
             Self::Raw(s) => format!("{pad}{s}"),
         }
     }
