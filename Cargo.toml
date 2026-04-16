@@ -8,6 +8,7 @@ license = "MIT"
 repository = "https://github.com/pleme-io/yaml-synthesizer"
 
 [dependencies]
+synthesizer-core = { git = "https://github.com/pleme-io/synthesizer-core" }
 
 [dev-dependencies]
 proptest = "1"
