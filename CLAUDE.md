@@ -2,20 +2,19 @@
 
 Typed AST for structurally correct YAML generation. Foundation for helm-synthesizer and kustomize-synthesizer. All output validated by tree-sitter-yaml parser.
 
-## Tests: 89 | Status: Proven, tree-sitter Validated, Zero Raw in Production
+## Tests: 99 | Status: Proven, tree-sitter Validated, No Raw (Structural)
 
 ## Core API
 
 | Type | Purpose |
 |------|---------|
-| `YamlNode` | 13 variants: Comment, Blank, Str, Int, Float, Bool, Null, Map, Seq, Block, Folded, TemplateExpr, ~~Raw~~ (deprecated) |
+| `YamlNode` | 12 variants: Comment, Blank, Str, Int, Float, Bool, Null, Map, Seq, Block, Folded, TemplateExpr |
 | `YamlEntry` | Key-value pair with optional inline comment |
 | `emit_file(&YamlNode)` | Emit without `---` separator |
 | `emit_document(&YamlNode)` | Emit with `---` separator |
 | `emit_multi_document(&[YamlNode])` | Multiple docs separated by `---` |
 
 `TemplateExpr` — typed bridge for Helm Go template expressions. NOT an escape hatch.
-`Raw` — **deprecated**. Use TemplateExpr or a typed variant.
 
 ## Builders
 

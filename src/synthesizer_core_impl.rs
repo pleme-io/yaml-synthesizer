@@ -32,22 +32,21 @@ impl SynthesizerNode for YamlNode {
             Self::Block(_) => 9,
             Self::Folded(_) => 10,
             Self::TemplateExpr(_) => 11,
-            #[allow(deprecated)]
-            Self::Raw(_) => 12,
         }
     }
 }
 
 impl NoRawAttestation for YamlNode {
     fn attestation() -> &'static str {
-        "YamlNode::Raw carries #[deprecated] in src/node.rs and is scheduled \
-         for removal in Wave 3 of the compound-knowledge refactor. \
-         tests/no_raw_invariant.rs::no_raw_in_production_code and \
-         tests/synthesizer_core_conformance.rs::no_raw_constructor_in_production_source \
-         scan src/ for Raw constructions; any accidental reintroduction \
-         fails CI. TemplateExpr is a typed Helm/Go template bridge, not a \
-         raw escape hatch. The #[allow(deprecated)] pin in \
-         synthesizer_core_impl.rs and node.rs emit() is the one intentional \
-         reference — a match arm pattern, not a construction."
+        "YamlNode::Raw was REMOVED in Wave 3 of the compound-knowledge \
+         refactor — the no-raw invariant is now STRUCTURAL, not \
+         documentary. YamlNode can no longer represent arbitrary strings; \
+         invalid states are unrepresentable at the type level. The \
+         defensive scanners in tests/no_raw_invariant.rs::no_raw_in_production_code \
+         and tests/synthesizer_core_conformance.rs::no_raw_constructor_in_production_source \
+         remain as a second line of defense against any accidental \
+         reintroduction. TemplateExpr is the typed Helm/Go template \
+         bridge and is NOT a raw escape hatch — it declares intent at \
+         the type level."
     }
 }

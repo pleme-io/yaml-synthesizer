@@ -175,11 +175,6 @@ fn map_with_inline_comment() {
     assert!(out.contains("port: 8080  # TCP port"));
 }
 
-#[test]
-fn raw_emits_verbatim() {
-    assert_eq!(YamlNode::Raw("!include other.yaml".into()).emit(0), "!include other.yaml");
-}
-
 // ── Indentation proofs ──────────────────────────────────────────────
 
 #[test]

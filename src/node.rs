@@ -29,9 +29,6 @@ pub enum YamlNode {
     /// NOT an escape hatch: this declares "I am a template expression"
     /// rather than "I am arbitrary content."
     TemplateExpr(String),
-    /// Raw YAML — DEPRECATED: use a typed variant instead.
-    #[deprecated(note = "use a typed variant instead of Raw — Raw defeats provability")]
-    Raw(String),
 }
 
 /// A key-value pair in a YAML mapping.
@@ -154,11 +151,6 @@ impl YamlNode {
                         Self::Comment(_) | Self::Blank => {
                             lines.push(format!("{pad}{}:{comment_suffix}", entry.key));
                         }
-                        // Catch remaining (deprecated Raw) — emit as inline
-                        _ => {
-                            let val = entry.value.emit(0);
-                            lines.push(format!("{pad}{}: {val}{comment_suffix}", entry.key));
-                        }
                     }
                 }
                 lines.join("\n")
@@ -207,8 +199,6 @@ impl YamlNode {
                 lines.join("\n")
             }
             Self::TemplateExpr(s) => format!("{pad}{s}"),
-            #[allow(deprecated)]
-            Self::Raw(s) => format!("{pad}{s}"),
         }
     }
 }
