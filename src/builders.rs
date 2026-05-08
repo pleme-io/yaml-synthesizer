@@ -17,6 +17,7 @@ pub struct FleetBuilder {
 
 /// One named flow — a DAG of steps with dependencies + actions.
 /// Actions are typed via [`FleetAction`]; callers pick a variant per step.
+#[derive(Debug, Clone)]
 pub struct FleetFlow {
     pub name: String,
     pub description: Option<String>,
@@ -25,6 +26,7 @@ pub struct FleetFlow {
 
 /// A step inside a [`FleetFlow`]. Action shape = one of the fleet-tool
 /// action types (shell, pangea-op, aws-cli, packer-build, etc.).
+#[derive(Debug, Clone)]
 pub struct FleetFlowStep {
     pub id: String,
     pub action: FleetAction,
@@ -34,7 +36,7 @@ pub struct FleetFlowStep {
 
 /// Typed action — discriminated union over what a fleet step can do.
 /// Serializes as `action: { type: <variant>, ...fields }`.
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum FleetAction {
     /// Opaque shell command. Use when a step is a pre-existing nix app
     /// call or a tiny glue snippet that doesn't fit other variants.
