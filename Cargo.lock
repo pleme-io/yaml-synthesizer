@@ -455,7 +455,7 @@ dependencies = [
 [[package]]
 name = "synthesizer-core"
 version = "0.1.0"
-source = "git+https://github.com/pleme-io/synthesizer-core#affb9cc46668f779a4d8a141964bbbe67d8078b7"
+source = "git+https://github.com/pleme-io/synthesizer-core#ec75f31f8f9b7b61ec777eb3f2902038cf69b40b"
 
 [[package]]
 name = "tempfile"
