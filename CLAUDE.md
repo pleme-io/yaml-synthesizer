@@ -5,7 +5,30 @@
 
 Typed AST for structurally correct YAML generation. Foundation for helm-synthesizer and kustomize-synthesizer. All output validated by tree-sitter-yaml parser.
 
-## Tests: 99 | Status: Proven, tree-sitter Validated, No Raw (Structural)
+## Tests: 109 | Status: Proven, tree-sitter Validated, No Raw (Structural)
+
+Reproduce — this is the CI gate in `.github/workflows/ci.yml`:
+
+```sh
+cargo test --all-targets --all-features   # 109 passed, 0 failed
+cargo test --doc         --all-features   #   0 (no doc examples yet)
+```
+
+`--all-targets` is required: without it a non-compiling test target can hide
+behind a green `cargo build`. It also excludes doctests, hence the second
+command.
+
+| Tests | Where | What |
+|------:|-------|------|
+| 41 | `tests/exhaustive_proofs.rs` | Every `YamlNode` variant emits correctly |
+| 16 | `src/node.rs` | Per-variant node emission |
+| 11 | `tests/synthesizer_core_conformance.rs` | `YamlNode` conformance to `synthesizer_core` traits |
+| 10 | `tests/yaml_validation.rs` | tree-sitter-yaml parse of every output pattern |
+| 10 | `src/flow_dag.rs` | DAG ordering for `FleetBuilder` steps |
+| 8 | `tests/properties.rs` | proptest invariants over arbitrary trees |
+| 6 | `src/emitter.rs` | Document / multi-document emission |
+| 6 | `src/builders.rs` | `FleetBuilder` + `ShikumiConfigBuilder` output |
+| 1 | `tests/no_raw_invariant.rs` | INVARIANT: zero `YamlNode::Raw` constructors in production source |
 
 ## Core API
 
