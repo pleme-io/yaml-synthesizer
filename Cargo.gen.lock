@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "cargo_lock_sha256": "40093b938b5492ae47238e95a8339360f63b6b7ca27273fd39da3c1e44f68347",
+  "cargo_lock_sha256": "eed4a9e4fdbd12910e255fd66549b8cd0a10b90464754f8dd04aca41d6bb015e",
   "manifest_sha256": {
-    "Cargo.toml": "865d3e21a5bf9d43f7c5e0460dfa35d608d308decf5b93c2f1d2933b6cd4dfa1"
+    "Cargo.toml": "8c4a417867cec06b9dc585ece8e6ed51a1bfc240aca780f30a882710fb0e44e8"
   },
   "target_resolves": {
     "base": {
@@ -835,7 +835,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "synthesizer-core-0.1.1-dd7a3b907419241d530ec5f890ab5ead81f82a5d": {
+      "synthesizer-core-0.1.1": {
         "runtime_dependencies": [],
         "build_dependencies": [],
         "features": []
@@ -1012,7 +1012,7 @@
         "runtime_dependencies": [
           {
             "name": "synthesizer_core",
-            "package_key": "synthesizer-core-0.1.1-dd7a3b907419241d530ec5f890ab5ead81f82a5d",
+            "package_key": "synthesizer-core-0.1.1",
             "kind": "normal",
             "features": [],
             "uses_default_features": true,
@@ -1763,7 +1763,7 @@
     "streaming-iterator-0.1.9": {
       "edition": "2021"
     },
-    "synthesizer-core-0.1.1-dd7a3b907419241d530ec5f890ab5ead81f82a5d": {
+    "synthesizer-core-0.1.1": {
       "edition": "2024"
     },
     "tempfile-3.27.0": {
@@ -1827,8 +1827,6 @@
       "build_script": "build.rs"
     }
   },
-  "git_nar_sha256": {
-    "synthesizer-core-0.1.1-dd7a3b907419241d530ec5f890ab5ead81f82a5d": "sha256-RNwKV9OVpue69M2p7nwoaU8A1YjSA3hHIeooQ475eKs="
-  },
+  "git_nar_sha256": {},
   "flake_metadata": {}
 }
