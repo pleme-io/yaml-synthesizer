@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
-  "cargo_lock_sha256": "359feb67608f2e84ef8846367119dd1529d6e00944e8dbc93b3f6df626651e18",
+  "cargo_lock_sha256": "40093b938b5492ae47238e95a8339360f63b6b7ca27273fd39da3c1e44f68347",
   "manifest_sha256": {
-    "Cargo.toml": "c9795622b258313fe513eb3bbbcd25393413670e5e891689a248eeb973381c4f"
+    "Cargo.toml": "865d3e21a5bf9d43f7c5e0460dfa35d608d308decf5b93c2f1d2933b6cd4dfa1"
   },
   "target_resolves": {
     "base": {
@@ -1008,7 +1008,7 @@
         "build_dependencies": [],
         "features": []
       },
-      "yaml-synthesizer-0.1.1": {
+      "yaml-synthesizer-0.1.2": {
         "runtime_dependencies": [
           {
             "name": "synthesizer_core",
@@ -1815,7 +1815,7 @@
         }
       ]
     },
-    "yaml-synthesizer-0.1.1": {
+    "yaml-synthesizer-0.1.2": {
       "edition": "2024",
       "lib_target": {
         "name": "yaml_synthesizer",
