@@ -46,18 +46,28 @@ pub enum FleetAction {
     PangeaOp { op: String },
     /// Structured AWS CLI invocation. Rendered as a shell action that
     /// exec's `aws <service> <subcmd>` with each flag = shell arg.
-    AwsCli { service: String, subcommand: String, args: Vec<(String, String)> },
+    AwsCli {
+        service: String,
+        subcommand: String,
+        args: Vec<(String, String)>,
+    },
     /// Packer build against a typed packer.json path with typed `-var`
     /// flags. `vars` values are LITERAL (pre-resolved) — if you need
     /// dynamic values, use a prior Shell/AwsCli step to discover them
     /// and a Shell step here.
-    PackerBuild { packer_json: String, vars: Vec<(String, String)> },
+    PackerBuild {
+        packer_json: String,
+        vars: Vec<(String, String)>,
+    },
     /// Reference another flow by name — DAG-of-DAGs / flow-of-flows
     /// composition. The referenced flow's steps expand into the parent
     /// flow's DAG at run time, with this step's id as the expansion
     /// scope. `params` substitute into the referenced flow's
     /// parameterized placeholders.
-    SubFlow { flow: String, params: Vec<(String, String)> },
+    SubFlow {
+        flow: String,
+        params: Vec<(String, String)>,
+    },
 }
 
 struct FleetStep {
@@ -216,7 +226,11 @@ fn action_to_yaml(action: &FleetAction) -> YamlNode {
             YamlEntry::new("type", YamlNode::str("pangea-op")),
             YamlEntry::new("op", YamlNode::str(op)),
         ]),
-        FleetAction::AwsCli { service, subcommand, args } => {
+        FleetAction::AwsCli {
+            service,
+            subcommand,
+            args,
+        } => {
             let args_yaml: Vec<YamlEntry> = args
                 .iter()
                 .map(|(k, v)| YamlEntry::new(k, YamlNode::str(v)))
@@ -276,13 +290,15 @@ impl ShikumiConfigBuilder {
 
     #[must_use]
     pub fn string(mut self, key: &str, value: &str) -> Self {
-        self.sections.push(YamlEntry::new(key, YamlNode::str(value)));
+        self.sections
+            .push(YamlEntry::new(key, YamlNode::str(value)));
         self
     }
 
     #[must_use]
     pub fn int(mut self, key: &str, value: i64) -> Self {
-        self.sections.push(YamlEntry::new(key, YamlNode::Int(value)));
+        self.sections
+            .push(YamlEntry::new(key, YamlNode::Int(value)));
         self
     }
 

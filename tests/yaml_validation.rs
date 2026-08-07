@@ -27,36 +27,44 @@ fn simple_map_valid_yaml() {
 
 #[test]
 fn nested_map_valid_yaml() {
-    let node = YamlNode::map(vec![
-        ("outer", YamlNode::map(vec![
-            ("inner", YamlNode::map(vec![
-                ("deep", YamlNode::Int(42)),
-            ])),
-        ])),
-    ]);
+    let node = YamlNode::map(vec![(
+        "outer",
+        YamlNode::map(vec![(
+            "inner",
+            YamlNode::map(vec![("deep", YamlNode::Int(42))]),
+        )]),
+    )]);
     validate_yaml(&emit_file(&node));
 }
 
 #[test]
 fn sequence_valid_yaml() {
-    let node = YamlNode::map(vec![
-        ("items", YamlNode::seq(vec![
+    let node = YamlNode::map(vec![(
+        "items",
+        YamlNode::seq(vec![
             YamlNode::str("a"),
             YamlNode::str("b"),
             YamlNode::str("c"),
-        ])),
-    ]);
+        ]),
+    )]);
     validate_yaml(&emit_file(&node));
 }
 
 #[test]
 fn seq_of_maps_valid_yaml() {
-    let node = YamlNode::map(vec![
-        ("steps", YamlNode::seq(vec![
-            YamlNode::map(vec![("name", YamlNode::str("step1")), ("action", YamlNode::str("apply"))]),
-            YamlNode::map(vec![("name", YamlNode::str("step2")), ("action", YamlNode::str("plan"))]),
-        ])),
-    ]);
+    let node = YamlNode::map(vec![(
+        "steps",
+        YamlNode::seq(vec![
+            YamlNode::map(vec![
+                ("name", YamlNode::str("step1")),
+                ("action", YamlNode::str("apply")),
+            ]),
+            YamlNode::map(vec![
+                ("name", YamlNode::str("step2")),
+                ("action", YamlNode::str("plan")),
+            ]),
+        ]),
+    )]);
     validate_yaml(&emit_file(&node));
 }
 
@@ -74,9 +82,10 @@ fn mixed_types_valid_yaml() {
 
 #[test]
 fn block_scalar_valid_yaml() {
-    let node = YamlNode::map(vec![
-        ("script", YamlNode::Block("echo hello\necho world".into())),
-    ]);
+    let node = YamlNode::map(vec![(
+        "script",
+        YamlNode::Block("echo hello\necho world".into()),
+    )]);
     validate_yaml(&emit_file(&node));
 }
 
@@ -91,7 +100,13 @@ fn fleet_builder_valid_yaml() {
     use yaml_synthesizer::builders::FleetBuilder;
     let fleet = FleetBuilder::new("deploy-quero")
         .description("Deploy quero platform")
-        .step("dns", "quero-dns", "apply", vec![], vec![("DOMAIN", "quero.lol")])
+        .step(
+            "dns",
+            "quero-dns",
+            "apply",
+            vec![],
+            vec![("DOMAIN", "quero.lol")],
+        )
         .step("builders", "quero-builders", "apply", vec!["dns"], vec![])
         .build();
     validate_yaml(&emit_file(&fleet));
@@ -104,26 +119,31 @@ fn shikumi_config_valid_yaml() {
         .string("domain", "quero.lol")
         .int("port", 8080)
         .bool("debug", false)
-        .section("server", YamlNode::map(vec![
-            ("host", YamlNode::str("0.0.0.0")),
-            ("port", YamlNode::Int(3000)),
-        ]))
+        .section(
+            "server",
+            YamlNode::map(vec![
+                ("host", YamlNode::str("0.0.0.0")),
+                ("port", YamlNode::Int(3000)),
+            ]),
+        )
         .build();
     validate_yaml(&emit_file(&config));
 }
 
 #[test]
 fn deeply_nested_valid_yaml() {
-    let node = YamlNode::map(vec![
-        ("a", YamlNode::map(vec![
-            ("b", YamlNode::map(vec![
-                ("c", YamlNode::map(vec![
-                    ("d", YamlNode::seq(vec![
-                        YamlNode::map(vec![("e", YamlNode::Int(1))]),
-                    ])),
-                ])),
-            ])),
-        ])),
-    ]);
+    let node = YamlNode::map(vec![(
+        "a",
+        YamlNode::map(vec![(
+            "b",
+            YamlNode::map(vec![(
+                "c",
+                YamlNode::map(vec![(
+                    "d",
+                    YamlNode::seq(vec![YamlNode::map(vec![("e", YamlNode::Int(1))])]),
+                )]),
+            )]),
+        )]),
+    )]);
     validate_yaml(&emit_file(&node));
 }

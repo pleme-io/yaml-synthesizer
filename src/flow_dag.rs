@@ -104,11 +104,8 @@ pub fn validate_dependencies(flow: &FleetFlow) -> Result<(), FlowError> {
 pub fn topological_sort(flow: &FleetFlow) -> Result<Vec<String>, FlowError> {
     validate_dependencies(flow)?;
 
-    let mut in_degree: BTreeMap<&str, usize> = flow
-        .steps
-        .iter()
-        .map(|s| (s.id.as_str(), 0usize))
-        .collect();
+    let mut in_degree: BTreeMap<&str, usize> =
+        flow.steps.iter().map(|s| (s.id.as_str(), 0usize)).collect();
     for step in &flow.steps {
         for dep in &step.depends_on {
             *in_degree.entry(step.id.as_str()).or_insert(0) += 0;
@@ -193,7 +190,10 @@ fn expand_recursive(
 
     for step in &flow.steps {
         match &step.action {
-            FleetAction::SubFlow { flow: subflow_name, params: _params } => {
+            FleetAction::SubFlow {
+                flow: subflow_name,
+                params: _params,
+            } => {
                 let Some(sub) = registry.get(subflow_name) else {
                     if strict {
                         return Err(FlowError::UnknownSubFlow {
@@ -282,7 +282,9 @@ mod tests {
     fn shell_step(id: &str, deps: Vec<&str>) -> FleetFlowStep {
         FleetFlowStep {
             id: id.into(),
-            action: FleetAction::Shell { command: format!("echo {id}") },
+            action: FleetAction::Shell {
+                command: format!("echo {id}"),
+            },
             depends_on: deps.into_iter().map(String::from).collect(),
             env: vec![],
         }
@@ -350,10 +352,7 @@ mod tests {
         let flow = FleetFlow {
             name: "loop".into(),
             description: None,
-            steps: vec![
-                shell_step("a", vec!["b"]),
-                shell_step("b", vec!["a"]),
-            ],
+            steps: vec![shell_step("a", vec!["b"]), shell_step("b", vec!["a"])],
         };
         let result = topological_sort(&flow);
         assert!(matches!(result, Err(FlowError::Cycle { .. })));
@@ -390,11 +389,7 @@ mod tests {
             .unwrap();
         assert!(synth.depends_on.contains(&"prove".into()));
         // verify now depends on the LAST step of the expansion.
-        let verify = expanded
-            .steps
-            .iter()
-            .find(|s| s.id == "verify")
-            .unwrap();
+        let verify = expanded.steps.iter().find(|s| s.id == "verify").unwrap();
         assert_eq!(verify.depends_on, vec!["roll.apply"]);
     }
 

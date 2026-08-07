@@ -116,8 +116,12 @@ impl YamlNode {
 
                     match &entry.value {
                         // Inline scalars
-                        Self::Str(_) | Self::Int(_) | Self::Float(_) | Self::Bool(_)
-                        | Self::Null | Self::TemplateExpr(_) => {
+                        Self::Str(_)
+                        | Self::Int(_)
+                        | Self::Float(_)
+                        | Self::Bool(_)
+                        | Self::Null
+                        | Self::TemplateExpr(_) => {
                             let val = entry.value.emit(0);
                             lines.push(format!("{pad}{}: {val}{comment_suffix}", entry.key));
                         }
@@ -217,8 +221,26 @@ fn needs_quoting(s: &str) -> bool {
         return true;
     }
     // Starts with special characters
-    if s.starts_with(|c: char| matches!(c, '{' | '[' | '&' | '*' | '?' | '|' | '-' | '<' | '>' | '=' | '!' | '%' | '@' | '`' | '#' | ','))
-    {
+    if s.starts_with(|c: char| {
+        matches!(
+            c,
+            '{' | '['
+                | '&'
+                | '*'
+                | '?'
+                | '|'
+                | '-'
+                | '<'
+                | '>'
+                | '='
+                | '!'
+                | '%'
+                | '@'
+                | '`'
+                | '#'
+                | ','
+        )
+    }) {
         return true;
     }
     // Contains : followed by space, or has newlines
@@ -305,9 +327,10 @@ mod tests {
 
     #[test]
     fn nested_map() {
-        let node = YamlNode::map(vec![
-            ("outer", YamlNode::map(vec![("inner", YamlNode::Int(1))])),
-        ]);
+        let node = YamlNode::map(vec![(
+            "outer",
+            YamlNode::map(vec![("inner", YamlNode::Int(1))]),
+        )]);
         let out = node.emit(0);
         assert!(out.contains("outer:"));
         assert!(out.contains("inner: 1"));
@@ -315,8 +338,7 @@ mod tests {
 
     #[test]
     fn map_with_comment() {
-        let entry = YamlEntry::new("port", YamlNode::Int(8080))
-            .with_comment("TCP port");
+        let entry = YamlEntry::new("port", YamlNode::Int(8080)).with_comment("TCP port");
         let node = YamlNode::Map(vec![entry]);
         let out = node.emit(0);
         assert!(out.contains("# TCP port"));
@@ -324,9 +346,10 @@ mod tests {
 
     #[test]
     fn block_scalar() {
-        let node = YamlNode::map(vec![
-            ("script", YamlNode::Block("echo hello\necho world".into())),
-        ]);
+        let node = YamlNode::map(vec![(
+            "script",
+            YamlNode::Block("echo hello\necho world".into()),
+        )]);
         let out = node.emit(0);
         assert!(out.contains("script: |"));
         assert!(out.contains("echo hello"));

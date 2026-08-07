@@ -149,9 +149,10 @@ fn seq_of_maps() {
 
 #[test]
 fn block_scalar() {
-    let node = YamlNode::map(vec![
-        ("script", YamlNode::Block("echo hello\necho world".into())),
-    ]);
+    let node = YamlNode::map(vec![(
+        "script",
+        YamlNode::Block("echo hello\necho world".into()),
+    )]);
     let out = node.emit(0);
     assert!(out.contains("script: |"));
     assert!(out.contains("  echo hello"));
@@ -160,9 +161,10 @@ fn block_scalar() {
 
 #[test]
 fn folded_scalar() {
-    let node = YamlNode::map(vec![
-        ("desc", YamlNode::Folded("line one\nline two".into())),
-    ]);
+    let node = YamlNode::map(vec![(
+        "desc",
+        YamlNode::Folded("line one\nline two".into()),
+    )]);
     let out = node.emit(0);
     assert!(out.contains("desc: >"));
 }
@@ -201,9 +203,21 @@ fn nested_indentation_increases() {
     let out = node.emit(0);
     let lines: Vec<&str> = out.lines().collect();
     // c should be more indented than b, which is more indented than a
-    let a_indent = lines.iter().find(|l| l.contains("a:")).map(|l| l.len() - l.trim_start().len()).unwrap();
-    let b_indent = lines.iter().find(|l| l.contains("b:")).map(|l| l.len() - l.trim_start().len()).unwrap();
-    let c_indent = lines.iter().find(|l| l.contains("c:")).map(|l| l.len() - l.trim_start().len()).unwrap();
+    let a_indent = lines
+        .iter()
+        .find(|l| l.contains("a:"))
+        .map(|l| l.len() - l.trim_start().len())
+        .unwrap();
+    let b_indent = lines
+        .iter()
+        .find(|l| l.contains("b:"))
+        .map(|l| l.len() - l.trim_start().len())
+        .unwrap();
+    let c_indent = lines
+        .iter()
+        .find(|l| l.contains("c:"))
+        .map(|l| l.len() - l.trim_start().len())
+        .unwrap();
     assert!(b_indent > a_indent);
     assert!(c_indent > b_indent);
 }
@@ -245,7 +259,10 @@ fn multi_document_count() {
 fn deterministic_emit() {
     let node = YamlNode::map(vec![
         ("a", YamlNode::Int(1)),
-        ("b", YamlNode::seq(vec![YamlNode::str("x"), YamlNode::str("y")])),
+        (
+            "b",
+            YamlNode::seq(vec![YamlNode::str("x"), YamlNode::str("y")]),
+        ),
         ("c", YamlNode::map(vec![("d", YamlNode::Bool(true))])),
     ]);
     let a = emit_file(&node);
@@ -291,7 +308,13 @@ fn fleet_builder_dependencies() {
 fn fleet_builder_env() {
     use yaml_synthesizer::builders::FleetBuilder;
     let fleet = FleetBuilder::new("test")
-        .step("dns", "quero-dns", "apply", vec![], vec![("DOMAIN", "quero.lol")])
+        .step(
+            "dns",
+            "quero-dns",
+            "apply",
+            vec![],
+            vec![("DOMAIN", "quero.lol")],
+        )
         .build();
     let out = emit_file(&fleet);
     assert!(out.contains("DOMAIN: quero.lol"));

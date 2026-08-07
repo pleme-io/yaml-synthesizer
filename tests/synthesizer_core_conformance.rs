@@ -62,10 +62,7 @@ fn law_determinism_holds_on_simple_nodes() {
 
 #[test]
 fn law_determinism_holds_on_seq() {
-    let n = YamlNode::Seq(vec![
-        YamlNode::Str("a".into()),
-        YamlNode::Str("b".into()),
-    ]);
+    let n = YamlNode::Seq(vec![YamlNode::Str("a".into()), YamlNode::Str("b".into())]);
     assert!(laws::is_deterministic(&n, 2));
 }
 
@@ -80,8 +77,14 @@ fn law_determinism_holds_on_map() {
 
 #[test]
 fn law_honors_indent_unit_on_comment() {
-    assert!(laws::honors_indent_unit(&YamlNode::Comment("hello".into()), 0));
-    assert!(laws::honors_indent_unit(&YamlNode::Comment("hello".into()), 2));
+    assert!(laws::honors_indent_unit(
+        &YamlNode::Comment("hello".into()),
+        0
+    ));
+    assert!(laws::honors_indent_unit(
+        &YamlNode::Comment("hello".into()),
+        2
+    ));
 }
 
 #[test]
